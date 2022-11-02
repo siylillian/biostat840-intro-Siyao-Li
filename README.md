@@ -1,4 +1,6 @@
-## 3. Include a `README.md` file
+## Description of the Website
 
-Your local repository should include a `README.md` file describing who is the author of the website and a link to the website after it has been deployed. Other things you might include are the technical details for how the website was created and/or deployed. 
+This is a introduction website of Siyao Li (Lillian), the link of the website is [website](https://siylillian.github.io/biostat840-intro-Siyao-Li/).
+
+The website is created by the Quarto Project and deploy the website by Quarto Pub.
 

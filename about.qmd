@@ -4,6 +4,19 @@ title: "About"
 
 ### Professional Interest
 
-### Education
+I have not decided the specific area that I interested in, but I may try explore my interest about the computational biology and genomics area .
 
-A page titled 'About'. This page should describe who you are in greater detail. It could include your professional interests and your educational and/or professional background and/or experience. It could also include any personal information you feel conformable sharing on the website. 
+### Education Background
+
+-   For my prior education, I studied in my hometown Nanjing, China.
+-   2018.9 - 2021.12 I finished my undergraduate study at University of California, Davis with major in Applied Mathematics.
+
+### Fun Facts About Me
+
+-   I am a vlogger! Please subscribe [my channel](https://space.bilibili.com/20943385?spm_id_from=333.337.0.0) on [Bilibili website](https://www.bilibili.com/), which is a Chinese online video sharing and social media platform.
+
+-   I have a lovely British Shorthair cat, which is called Zhima Li, but it is now in China.
+
+    ![](zhima.jpg)
+
+-   I love K-pop. My recent favorite K-Pop boy group is [Seventeen](https://open.spotify.com/artist/7nqOGRxlXj7N2JYbgNEjYH), which contains 13 people.

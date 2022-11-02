@@ -1,15 +1,22 @@
 ---
-title: "Data Analysis"
+title: "Example Analysis"
 ---
 ```{r}
 head(airquality)
 ```
 
-A data analysis page called 'Example analysis'. You can pick any dataset you wish you analyze. In this webpage, you will analyze a dataset and summarize the results. The requirements for this webpage are the following: 
-    - You must describe what is the question you aim to answer with the data and data analysis. 
-    - You must describe who is the intended audience for the data analysis. 
-    - You must describe and link to where the original data come from that you chose. 
-    - You must include a link to a data dictionary for the data or create one inside the webpage. 
+### what is the question you aim to answer with the data and data analysis
+
+
+### who is the intended audience for the data analysis
+
+### describe and link to where the original data come from that you chose
+
+### a link to a data dictionary for the data or create one inside the webpage.
+
+
+
+     
     - Your analysis must include some minimal form of data wrangling with you using at least five different functions from `dplyr` or `tidyr`. 
     - Your analysis should include at least three plots with you using at least three different `geom_*()` functions from `ggplot2` (or another package with `geom_*()` functions). 
     - Plots should have titles, subtitles, captions, and human-understandable axis labels. 
