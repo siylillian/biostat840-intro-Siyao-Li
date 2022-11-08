@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.247">
+<meta name="generator" content="quarto-1.2.258">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -83,6 +83,25 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 
@@ -169,15 +188,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#what-is-the-question-you-aim-to-answer-with-the-data-and-data-analysis" id="toc-what-is-the-question-you-aim-to-answer-with-the-data-and-data-analysis" class="nav-link active" data-scroll-target="#what-is-the-question-you-aim-to-answer-with-the-data-and-data-analysis">what is the question you aim to answer with the data and data analysis</a></li>
-  <li><a href="#who-is-the-intended-audience-for-the-data-analysis" id="toc-who-is-the-intended-audience-for-the-data-analysis" class="nav-link" data-scroll-target="#who-is-the-intended-audience-for-the-data-analysis">who is the intended audience for the data analysis</a></li>
-  <li><a href="#describe-and-link-to-where-the-original-data-come-from-that-you-chose" id="toc-describe-and-link-to-where-the-original-data-come-from-that-you-chose" class="nav-link" data-scroll-target="#describe-and-link-to-where-the-original-data-come-from-that-you-chose">describe and link to where the original data come from that you chose</a></li>
-  <li><a href="#a-link-to-a-data-dictionary-for-the-data-or-create-one-inside-the-webpage." id="toc-a-link-to-a-data-dictionary-for-the-data-or-create-one-inside-the-webpage." class="nav-link" data-scroll-target="#a-link-to-a-data-dictionary-for-the-data-or-create-one-inside-the-webpage.">a link to a data dictionary for the data or create one inside the webpage.</a></li>
+  <li><a href="#background" id="toc-background" class="nav-link active" data-scroll-target="#background">Background</a></li>
+  <li><a href="#part-1-wrangling-data" id="toc-part-1-wrangling-data" class="nav-link" data-scroll-target="#part-1-wrangling-data">Part 1: Wrangling data</a></li>
+  <li><a href="#part2-data-visualization" id="toc-part2-data-visualization" class="nav-link" data-scroll-target="#part2-data-visualization">Part2: Data Visualization</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix">Appendix</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -197,43 +217,250 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </header>
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(airquality)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  Ozone Solar.R Wind Temp Month Day
-1    41     190  7.4   67     5   1
-2    36     118  8.0   72     5   2
-3    12     149 12.6   74     5   3
-4    18     313 11.5   62     5   4
-5    NA      NA 14.3   56     5   5
-6    28      NA 14.9   66     5   6</code></pre>
+
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="background" class="level3">
+<h3 class="anchored" data-anchor-id="background">Background</h3>
+<p><strong>Question</strong>: We want to see the the relationship for fires with temperature and rainfall for five cities (Brisbane, Canberra, Melbourne, Perth, Sydney) in recent years.</p>
+<p><strong>Audience</strong>: People who care about the fires in Australia, maybe residences.</p>
+<p><strong>Data</strong>: The <a href="https://github.com/rfordatascience/tidytuesday/tree/master/data/2020/2020-01-17">data</a> shows the temperature and rainfall data, which collected from the Australian Bureau of Meteorology of some weather stations<span class="citation" data-cites="data">(<a href="#ref-data" role="doc-biblioref">jthomasmock 2020</a>)</span>.</p>
+<p>The data dictionary for the data is : <a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-01-07/readme.md#data-dictionary" class="uri">https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-01-07/readme.md#data-dictionary</a></p>
+</section>
+<section id="part-1-wrangling-data" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="part-1-wrangling-data">Part 1: Wrangling data</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># wrangling data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>rainfall <span class="sc">%&gt;%</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unite</span>(date,<span class="fu">c</span>(year,month,day)) <span class="sc">%&gt;%</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">ymd</span>(date)) <span class="sc">%&gt;%</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.integer</span>(<span class="fu">substr</span>(date,<span class="dv">1</span>,<span class="dv">4</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">city_name =</span> <span class="fu">str_to_upper</span>(city_name)) <span class="sc">%&gt;%</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(temperature, <span class="at">id =</span> <span class="fu">c</span>(<span class="st">"city_name"</span>,<span class="st">"date"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">&gt;=</span> <span class="dv">2015</span>) <span class="ot">-&gt;</span> df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell page-columns page-full">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(df[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>,<span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>,<span class="dv">10</span><span class="sc">:</span><span class="dv">12</span>)])</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+<div class="no-row-height column-margin column-container"><div class="cell-output-display">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: left;">city_name</th>
+<th style="text-align: left;">date</th>
+<th style="text-align: right;">rainfall</th>
+<th style="text-align: right;">year</th>
+<th style="text-align: right;">temperature</th>
+<th style="text-align: left;">temp_type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">PERTH</td>
+<td style="text-align: left;">2015-01-29</td>
+<td style="text-align: right;">0.6</td>
+<td style="text-align: right;">2015</td>
+<td style="text-align: right;">37.8</td>
+<td style="text-align: left;">max</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PERTH</td>
+<td style="text-align: left;">2015-01-29</td>
+<td style="text-align: right;">0.6</td>
+<td style="text-align: right;">2015</td>
+<td style="text-align: right;">22.0</td>
+<td style="text-align: left;">min</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PERTH</td>
+<td style="text-align: left;">2015-01-30</td>
+<td style="text-align: right;">2.2</td>
+<td style="text-align: right;">2015</td>
+<td style="text-align: right;">35.0</td>
+<td style="text-align: left;">max</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PERTH</td>
+<td style="text-align: left;">2015-01-30</td>
+<td style="text-align: right;">2.2</td>
+<td style="text-align: right;">2015</td>
+<td style="text-align: right;">21.6</td>
+<td style="text-align: left;">min</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PERTH</td>
+<td style="text-align: left;">2015-02-02</td>
+<td style="text-align: right;">8.0</td>
+<td style="text-align: right;">2015</td>
+<td style="text-align: right;">32.6</td>
+<td style="text-align: left;">max</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PERTH</td>
+<td style="text-align: left;">2015-02-02</td>
+<td style="text-align: right;">8.0</td>
+<td style="text-align: right;">2015</td>
+<td style="text-align: right;">19.8</td>
+<td style="text-align: left;">min</td>
+</tr>
+</tbody>
+</table>
+</div></div></div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Choose Recent Year Data
 </div>
 </div>
-<section id="what-is-the-question-you-aim-to-answer-with-the-data-and-data-analysis" class="level3">
-<h3 class="anchored" data-anchor-id="what-is-the-question-you-aim-to-answer-with-the-data-and-data-analysis">what is the question you aim to answer with the data and data analysis</h3>
+<div class="callout-body-container callout-body">
+<p>In order to see the the recent situation in Australia, w only consider four years, which from 2015 to 2019, to show the most recent rainfall and temperature data.</p>
+</div>
+</div>
 </section>
-<section id="who-is-the-intended-audience-for-the-data-analysis" class="level3">
-<h3 class="anchored" data-anchor-id="who-is-the-intended-audience-for-the-data-analysis">who is the intended audience for the data analysis</h3>
+<section id="part2-data-visualization" class="level3">
+<h3 class="anchored" data-anchor-id="part2-data-visualization">Part2: Data Visualization</h3>
+<section id="show-the-rainfall-for-different-cities" class="level4">
+<h4 class="anchored" data-anchor-id="show-the-rainfall-for-different-cities">Show the Rainfall For different Cities</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># bar plot year vs mean rainfall</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(city_name, year) <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_rainfall =</span> <span class="fu">mean</span>(rainfall)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">fill=</span>city_name, <span class="at">y=</span>mean_rainfall, <span class="at">x=</span>year)) <span class="sc">+</span> </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="at">position=</span><span class="st">"dodge"</span>, <span class="at">stat=</span><span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Average of Rainfall v.s. Year (2015-2019)"</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">subtitle =</span> <span class="st">"Canberra has the lowest mean rainfall each year,</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="st">       and Perth have the highest mean rainfall in year 2015-2019."</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">"Year"</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">"Mean of Rainfall"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="data_analysis_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We also would like to see some distribution of rainfall for cities</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span> <span class="fu">log</span>(rainfall))) <span class="sc">+</span> </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>city_name)<span class="sc">+</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Rainfall for Five Cities in the Year (2015-2019)"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Distribution of rainfall for Perth is most normal distributed,</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="st">       Brisbane, Canberra, Melbourne has some left outliers for the distribution of rainfall."</span>, </span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"log(rainfall)"</span>,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"frequency"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="data_analysis_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Reason for take log for transformation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We analyze the log transformation for rainfall, since the distribution of rainfall is left skewed.</p>
+</div>
+</div>
 </section>
-<section id="describe-and-link-to-where-the-original-data-come-from-that-you-chose" class="level3">
-<h3 class="anchored" data-anchor-id="describe-and-link-to-where-the-original-data-come-from-that-you-chose">describe and link to where the original data come from that you chose</h3>
+<section id="show-the-temperature-for-different-cities" class="level4">
+<h4 class="anchored" data-anchor-id="show-the-temperature-for-different-cities">Show the Temperature For different Cities</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>calculate_CI <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">conf =</span> <span class="fl">0.95</span>) {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  degrees_freedom <span class="ot">=</span> <span class="fu">length</span>(x)<span class="sc">-</span><span class="dv">1</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  alpha <span class="ot">=</span> <span class="dv">1</span> <span class="sc">-</span> conf</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  t_score <span class="ot">=</span> <span class="fu">qt</span>(<span class="at">p=</span>alpha<span class="sc">/</span><span class="dv">2</span>, <span class="at">df=</span>degrees_freedom, <span class="at">lower.tail=</span><span class="cn">FALSE</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  lower_bound <span class="ot">=</span> <span class="fu">mean</span>(x,<span class="at">na.rm =</span> T) <span class="sc">-</span> t_score<span class="sc">*</span>(<span class="fu">sd</span>(x,<span class="at">na.rm =</span> T)<span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">length</span>(x)))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  upper_bound <span class="ot">=</span> <span class="fu">mean</span>(x,<span class="at">na.rm =</span> T) <span class="sc">+</span> t_score<span class="sc">*</span>(<span class="fu">sd</span>(x,<span class="at">na.rm =</span> T)<span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">length</span>(x)))</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">c</span>(<span class="st">"lower_bound"</span> <span class="ot">=</span> lower_bound,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>           <span class="st">"upper_bound"</span> <span class="ot">=</span> upper_bound))</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># line plot year vs mean temp</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(city_name, year, temp_type) <span class="sc">%&gt;%</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_temp =</span> <span class="fu">mean</span>(temperature,<span class="at">na.rm =</span> T),</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">lower_bound =</span> <span class="fu">calculate_CI</span>(temperature)[<span class="dv">1</span>],</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">upper_bound =</span> <span class="fu">calculate_CI</span>(temperature)[<span class="dv">2</span>]) <span class="sc">%&gt;%</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year,<span class="at">y=</span> mean_temp, <span class="at">color =</span> temp_type)) <span class="sc">+</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> lower_bound, <span class="at">ymax =</span> upper_bound), <span class="at">width =</span> <span class="fl">0.1</span>, <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>city_name)<span class="sc">+</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Average and 95% Confidence Interval for Temperature for Five Cities with Year (2015-2019)"</span>,</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Canberra has the lowest mean temperature each year,</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="st">       and Sydney and Brisbane have the highest mean temperature in year 2015-2019."</span>,</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Year"</span>,</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Mean of Temperature"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="data_analysis_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The 2015 and 2019 mean temperature in Australia shows below:</p>
+<p><img src="images/2019temp.gif" class="img-fluid" alt="2019 Australian mean temperature decile map"> <span class="citation" data-cites="AustraliaTemp2019">(<a href="#ref-AustraliaTemp2019" role="doc-biblioref">Meteorology 2020</a>)</span></p>
+<p><img src="images/2015temp.png" class="img-fluid" alt="2015 Australian mean temperature decile map"> <span class="citation" data-cites="AustraliaTemp2015">(<a href="#ref-AustraliaTemp2015" role="doc-biblioref">Meteorology 2016</a>)</span></p>
 </section>
-<section id="a-link-to-a-data-dictionary-for-the-data-or-create-one-inside-the-webpage." class="level3">
-<h3 class="anchored" data-anchor-id="a-link-to-a-data-dictionary-for-the-data-or-create-one-inside-the-webpage.">a link to a data dictionary for the data or create one inside the webpage.</h3>
-<pre><code>- Your analysis must include some minimal form of data wrangling with you using at least five different functions from `dplyr` or `tidyr`. 
-- Your analysis should include at least three plots with you using at least three different `geom_*()` functions from `ggplot2` (or another package with `geom_*()` functions). 
-- Plots should have titles, subtitles, captions, and human-understandable axis labels. 
-- At least one plot should using a type of faceting (`facet_grid()` or `facet_wrap()`). 
-- Your analysis must include one image or table (not one you created yourself, but one you have saved locally or one from the web). 
-- Your analysis must include at least two different [callout blocks](https://quarto.org/docs/authoring/callouts.html).
-- Your analysis must include a `.bib` file, which you use to reference at least three unique citations. For example, it could be to a website or paper from where the original data came from or it could be to a paper describing a method you are using to analyze the data. 
-- Your analysis must include the use of at least 1 [margin content](https://www.stephaniehicks.com/jhustatprogramming2022/posts/2022-10-27-build-website/#margin-content). 
-- You must summarize your analysis and/or results with a paragraph (4-6 sentences).
-- At the end of the data analysis, list out each of the functions you used from each of the packages (`dplyr`, `tidyr`, and `ggplot2`) to help the TA with respect to making sure you met all the requirements described above. </code></pre>
+</section>
+<section id="conclusion" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
+<p>From the analysis above, we can noticed that the temperature is increasing through 2015 to 2019, and there is a strictly increase in 2019. Both Brisbane and Sydney have the highest temperature in recent years, and the rainfall is less in this two areas also. For the fewest rainfall of five cities is Canberra, and the temperature in this city is also very high. By the news in the Internet<span class="citation" data-cites="fire">(<a href="#ref-fire" role="doc-biblioref">BBC 2020</a>)</span>, we can see that there are lots of fire detection or hot-spots in these areas. Therefore, the fire is associated with temperature and rainfall. Although, Melbourne has the lowest temperature and Perth has the most rainfall in these five cities, there are still some fire detection.</p>
+</section>
+<section id="appendix" class="level3">
+<h3 class="anchored" data-anchor-id="appendix">Appendix</h3>
+<p><strong>dplyr:</strong></p>
+<ul>
+<li><p>mutate()</p></li>
+<li><p>inner_join()</p></li>
+<li><p>filter()</p></li>
+<li><p>group_by()</p></li>
+<li><p>summarise()</p></li>
+</ul>
+<p><strong>tidyr:</strong></p>
+<ul>
+<li><p>drop_na()</p></li>
+<li><p>unite()</p></li>
+</ul>
+<p><strong>ggplot2:</strong></p>
+<ul>
+<li><p>geom_bar()</p></li>
+<li><p>geom_histogram()</p></li>
+<li><p>geom_line()</p></li>
+<li><p>geom_errorbar()</p></li>
+<li><p>facet_wrap()</p></li>
+<li><p>labs()</p></li>
+</ul>
 
 
+
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-fire" class="csl-entry" role="doc-biblioentry">
+BBC. 2020. <span>“Australia Fires: A Visual Guide to the Bushfire Crisis.”</span> <a href="https://www.bbc.com/news/world-australia-50951043">https://www.bbc.com/news/world-australia-50951043</a>.
+</div>
+<div id="ref-data" class="csl-entry" role="doc-biblioentry">
+jthomasmock. 2020. <span>“Australia Fires.”</span> <a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-01-07/">https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-01-07/</a>.
+</div>
+<div id="ref-AustraliaTemp2015" class="csl-entry" role="doc-biblioentry">
+Meteorology, Australian Bureau of. 2016. <span>“2015 Australian Mean Temperature Decile Map.”</span> <a href="http://www.bom.gov.au/climate/current/annual/aus/2015/">http://www.bom.gov.au/climate/current/annual/aus/2015/</a>.
+</div>
+<div id="ref-AustraliaTemp2019" class="csl-entry" role="doc-biblioentry">
+———. 2020. <span>“2019 Australian Mean Temperature Decile Map.”</span> <a href="http://www.bom.gov.au/climate/current/annual/aus/2019/">http://www.bom.gov.au/climate/current/annual/aus/2019/</a>.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
