@@ -1,29 +1,174 @@
 ---
 title: "Example Analysis"
+bibliography: my-refs.bib
 ---
-```{r}
-head(airquality)
+
+```{r, echo=FALSE}
+#| message: FALSE
+rainfall <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-07/rainfall.csv')
+temperature <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-07/temperature.csv')
+
 ```
 
-### what is the question you aim to answer with the data and data analysis
+```{r}
+#| message: FALSE
+library(tidyverse)
+library(stringr)
+library(tidyr)
+library(lubridate)
+```
 
+### Background
 
-### who is the intended audience for the data analysis
+**Question**: We want to see the the relationship for fires with temperature and rainfall for five cities (Brisbane, Canberra, Melbourne, Perth, Sydney) in recent years.
 
-### describe and link to where the original data come from that you chose
+**Audience**: People who care about the fires in Australia, maybe residences.
 
-### a link to a data dictionary for the data or create one inside the webpage.
+**Data**: The [data](https://github.com/rfordatascience/tidytuesday/tree/master/data/2020/2020-01-17) shows the temperature and rainfall data, which collected from the Australian Bureau of Meteorology of some weather stations[@data].
 
+The data dictionary for the data is : <https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-01-07/readme.md#data-dictionary>
 
+### Part 1: Wrangling data
 
-     
-    - Your analysis must include some minimal form of data wrangling with you using at least five different functions from `dplyr` or `tidyr`. 
-    - Your analysis should include at least three plots with you using at least three different `geom_*()` functions from `ggplot2` (or another package with `geom_*()` functions). 
-    - Plots should have titles, subtitles, captions, and human-understandable axis labels. 
-    - At least one plot should using a type of faceting (`facet_grid()` or `facet_wrap()`). 
-    - Your analysis must include one image or table (not one you created yourself, but one you have saved locally or one from the web). 
-    - Your analysis must include at least two different [callout blocks](https://quarto.org/docs/authoring/callouts.html).
-    - Your analysis must include a `.bib` file, which you use to reference at least three unique citations. For example, it could be to a website or paper from where the original data came from or it could be to a paper describing a method you are using to analyze the data. 
-    - Your analysis must include the use of at least 1 [margin content](https://www.stephaniehicks.com/jhustatprogramming2022/posts/2022-10-27-build-website/#margin-content). 
-    - You must summarize your analysis and/or results with a paragraph (4-6 sentences).
-    - At the end of the data analysis, list out each of the functions you used from each of the packages (`dplyr`, `tidyr`, and `ggplot2`) to help the TA with respect to making sure you met all the requirements described above. 
+```{r}
+#| message: FALSE
+#| warning: FALSE
+# wrangling data
+rainfall %>%
+  drop_na() %>%
+  unite(date,c(year,month,day)) %>%
+  mutate(date = ymd(date)) %>%
+  mutate(year = as.integer(substr(date,1,4))) %>%
+  mutate(city_name = str_to_upper(city_name)) %>%
+  inner_join(temperature, id = c("city_name","date")) %>%
+  filter(year >= 2015) -> df
+```
+
+```{r}
+#| column: margin
+knitr::kable(
+  head(df[1:6,c(2:4,10:12)])
+)
+```
+
+::: callout-note
+## Choose Recent Year Data
+
+In order to see the the recent situation in Australia, w only consider four years, which from 2015 to 2019, to show the most recent rainfall and temperature data.
+:::
+
+### Part2: Data Visualization
+
+#### Show the Rainfall For different Cities
+
+```{r}
+#| message: FALSE
+# bar plot year vs mean rainfall
+df %>%
+  group_by(city_name, year) %>%
+  summarise(mean_rainfall = mean(rainfall)) %>%
+  ggplot(aes(fill=city_name, y=mean_rainfall, x=year)) + 
+    geom_bar(position="dodge", stat="identity") +
+    labs(title = "Average of Rainfall v.s. Year (2015-2019)",
+         subtitle = "Canberra has the lowest mean rainfall each year,
+       and Perth have the highest mean rainfall in year 2015-2019.",
+         x = "Year",
+         y = "Mean of Rainfall")
+```
+
+We also would like to see some distribution of rainfall for cities
+
+```{r}
+#| message: FALSE
+#| warning: FALSE
+df %>% 
+  ggplot(aes(x= log(rainfall))) + 
+  geom_histogram() +
+  facet_wrap(~city_name)+
+  labs(title = "Distribution of Rainfall for Five Cities in the Year (2015-2019)",
+       subtitle = "Distribution of rainfall for Perth is most normal distributed,
+       Brisbane, Canberra, Melbourne has some left outliers for the distribution of rainfall.", 
+       x = "log(rainfall)",
+       y = "frequency")
+```
+
+::: callout-tip
+## Reason for take log for transformation
+
+We analyze the log transformation for rainfall, since the distribution of rainfall is left skewed.
+:::
+
+#### Show the Temperature For different Cities
+
+```{r}
+#| message: FALSE
+calculate_CI <- function(x, conf = 0.95) {
+  degrees_freedom = length(x)-1
+  alpha = 1 - conf
+  t_score = qt(p=alpha/2, df=degrees_freedom, lower.tail=FALSE)
+  lower_bound = mean(x,na.rm = T) - t_score*(sd(x,na.rm = T)/sqrt(length(x)))
+  upper_bound = mean(x,na.rm = T) + t_score*(sd(x,na.rm = T)/sqrt(length(x)))
+  return(c("lower_bound" = lower_bound,
+           "upper_bound" = upper_bound))
+}
+
+# line plot year vs mean temp
+df %>%
+  group_by(city_name, year, temp_type) %>%
+  summarise(mean_temp = mean(temperature,na.rm = T),
+            lower_bound = calculate_CI(temperature)[1],
+            upper_bound = calculate_CI(temperature)[2]) %>%
+  ggplot(aes(x = year,y= mean_temp, color = temp_type)) +
+  geom_line()+
+  geom_errorbar(aes(ymin = lower_bound, ymax = upper_bound), width = 0.1, color = "red") +
+  facet_wrap(~city_name)+
+  labs(title = "Average and 95% Confidence Interval for Temperature for Five Cities with Year (2015-2019)",
+       subtitle = "Canberra has the lowest mean temperature each year,
+       and Sydney and Brisbane have the highest mean temperature in year 2015-2019.",
+       x = "Year",
+       y = "Mean of Temperature")
+```
+
+The 2015 and 2019 mean temperature in Australia shows below:
+
+![2019 Australian mean temperature decile map](images/2019temp.gif) [@AustraliaTemp2019]
+
+![2015 Australian mean temperature decile map](images/2015temp.png) [@AustraliaTemp2015]
+
+### Conclusion
+
+From the analysis above, we can noticed that the temperature is increasing through 2015 to 2019, and there is a strictly increase in 2019. Both Brisbane and Sydney have the highest temperature in recent years, and the rainfall is less in this two areas also. For the fewest rainfall of five cities is Canberra, and the temperature in this city is also very high. By the news in the Internet[@fire], we can see that there are lots of fire detection or hot-spots in these areas. Therefore, the fire is associated with temperature and rainfall. Although, Melbourne has the lowest temperature and Perth has the most rainfall in these five cities, there are still some fire detection. 
+
+### Appendix
+
+**dplyr:**
+
+-   mutate()
+
+-   inner_join()
+
+-   filter()
+
+-   group_by()
+
+-   summarise()
+
+**tidyr:**
+
+-   drop_na()
+
+-   unite()
+
+**ggplot2:**
+
+-   geom_bar()
+
+-   geom_histogram()
+
+-   geom_line()
+
+-   geom_errorbar()
+
+-   facet_wrap()
+
+-   labs()

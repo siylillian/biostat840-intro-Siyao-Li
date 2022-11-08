@@ -11,9 +11,9 @@ My name is Siyao Li (Lillian). I am currently a first year ScM student of Biosta
 
 I came from Nanjing, China, which is the capital of China's eastern Jiangsu province. This is also a capital with six dynasties.
 
-![](nanjing.jpg)
+![](images/nanjing.jpg)
 
 ### Enjoy to do for Fun
-For my free time, I love to find delicious food. The pictures are below.
-![](food.jpg)
 
+For my free time, I love to find delicious food. The pictures are below. 
+![](images/food.jpg)
