@@ -24,7 +24,7 @@ library(lubridate)
 
 **Audience**: People who care about the fires in Australia, maybe residences.
 
-**Data**: The [data](https://github.com/rfordatascience/tidytuesday/tree/master/data/2020/2020-01-17) shows the temperature and rainfall data, which collected from the Australian Bureau of Meteorology of some weather stations[@data].
+**Data**: The [data](https://github.com/rfordatascience/tidytuesday/tree/master/data/2020/2020-01-17) shows the temperature and rainfall data, which collected from the Australian Bureau of Meteorology of some weather stations[@tidytuesday].
 
 The data dictionary for the data is : <https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-01-07/readme.md#data-dictionary>
 
@@ -47,7 +47,7 @@ rainfall %>%
 ```{r}
 #| column: margin
 knitr::kable(
-  head(df[1:6,c(2:4,10:12)])
+  head(df[1:4,c(2:4,10:12)])
 )
 ```
 
@@ -137,38 +137,18 @@ The 2015 and 2019 mean temperature in Australia shows below:
 
 ### Conclusion
 
-From the analysis above, we can noticed that the temperature is increasing through 2015 to 2019, and there is a strictly increase in 2019. Both Brisbane and Sydney have the highest temperature in recent years, and the rainfall is less in this two areas also. For the fewest rainfall of five cities is Canberra, and the temperature in this city is also very high. By the news in the Internet[@fire], we can see that there are lots of fire detection or hot-spots in these areas. Therefore, the fire is associated with temperature and rainfall. Although, Melbourne has the lowest temperature and Perth has the most rainfall in these five cities, there are still some fire detection. 
+From the analysis above, we can noticed that the temperature is increasing through 2015 to 2019, and there is a strictly increase in 2019. Both Brisbane and Sydney have the highest temperature in recent years, and the rainfall is less in this two areas also. For the fewest rainfall of five cities is Canberra, and the temperature in this city is also very high. By the news in the Internet[@fire], we can see that there are lots of fire detection or hot-spots in these areas. Therefore, the fire is associated with temperature and rainfall. Although, Melbourne has the lowest temperature and Perth has the most rainfall in these five cities, there are still some fire detection.
 
 ### Appendix
 
 **dplyr:**
 
--   mutate()
-
--   inner_join()
-
--   filter()
-
--   group_by()
-
--   summarise()
+-   mutate(), inner_join(), filter(), group_by(), summarise()
 
 **tidyr:**
 
--   drop_na()
-
--   unite()
+-   drop_na(), unite()
 
 **ggplot2:**
 
--   geom_bar()
-
--   geom_histogram()
-
--   geom_line()
-
--   geom_errorbar()
-
--   facet_wrap()
-
--   labs()
+-   geom_bar(), geom_histogram(), geom_line(), geom_errorbar(), facet_wrap(), labs()
