@@ -229,7 +229,7 @@ div.csl-indent {
 <h3 class="anchored" data-anchor-id="background">Background</h3>
 <p><strong>Question</strong>: We want to see the the relationship for fires with temperature and rainfall for five cities (Brisbane, Canberra, Melbourne, Perth, Sydney) in recent years.</p>
 <p><strong>Audience</strong>: People who care about the fires in Australia, maybe residences.</p>
-<p><strong>Data</strong>: The <a href="https://github.com/rfordatascience/tidytuesday/tree/master/data/2020/2020-01-17">data</a> shows the temperature and rainfall data, which collected from the Australian Bureau of Meteorology of some weather stations<span class="citation" data-cites="data">(<a href="#ref-data" role="doc-biblioref">jthomasmock 2020</a>)</span>.</p>
+<p><strong>Data</strong>: The <a href="https://github.com/rfordatascience/tidytuesday/tree/master/data/2020/2020-01-17">data</a> shows the temperature and rainfall data, which collected from the Australian Bureau of Meteorology of some weather stations<span class="citation" data-cites="tidytuesday">(<a href="#ref-tidytuesday" role="doc-biblioref">Mock 2022</a>)</span>.</p>
 <p>The data dictionary for the data is : <a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-01-07/readme.md#data-dictionary" class="uri">https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-01-07/readme.md#data-dictionary</a></p>
 </section>
 <section id="part-1-wrangling-data" class="level3 page-columns page-full">
@@ -247,7 +247,7 @@ div.csl-indent {
 </div>
 <div class="cell page-columns page-full">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(df[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>,<span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>,<span class="dv">10</span><span class="sc">:</span><span class="dv">12</span>)])</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(df[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>,<span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>,<span class="dv">10</span><span class="sc">:</span><span class="dv">12</span>)])</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 <div class="no-row-height column-margin column-container"><div class="cell-output-display">
@@ -293,22 +293,6 @@ div.csl-indent {
 <td style="text-align: right;">2.2</td>
 <td style="text-align: right;">2015</td>
 <td style="text-align: right;">21.6</td>
-<td style="text-align: left;">min</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">PERTH</td>
-<td style="text-align: left;">2015-02-02</td>
-<td style="text-align: right;">8.0</td>
-<td style="text-align: right;">2015</td>
-<td style="text-align: right;">32.6</td>
-<td style="text-align: left;">max</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">PERTH</td>
-<td style="text-align: left;">2015-02-02</td>
-<td style="text-align: right;">8.0</td>
-<td style="text-align: right;">2015</td>
-<td style="text-align: right;">19.8</td>
 <td style="text-align: left;">min</td>
 </tr>
 </tbody>
@@ -422,25 +406,15 @@ Reason for take log for transformation
 <h3 class="anchored" data-anchor-id="appendix">Appendix</h3>
 <p><strong>dplyr:</strong></p>
 <ul>
-<li><p>mutate()</p></li>
-<li><p>inner_join()</p></li>
-<li><p>filter()</p></li>
-<li><p>group_by()</p></li>
-<li><p>summarise()</p></li>
+<li>mutate(), inner_join(), filter(), group_by(), summarise()</li>
 </ul>
 <p><strong>tidyr:</strong></p>
 <ul>
-<li><p>drop_na()</p></li>
-<li><p>unite()</p></li>
+<li>drop_na(), unite()</li>
 </ul>
 <p><strong>ggplot2:</strong></p>
 <ul>
-<li><p>geom_bar()</p></li>
-<li><p>geom_histogram()</p></li>
-<li><p>geom_line()</p></li>
-<li><p>geom_errorbar()</p></li>
-<li><p>facet_wrap()</p></li>
-<li><p>labs()</p></li>
+<li>geom_bar(), geom_histogram(), geom_line(), geom_errorbar(), facet_wrap(), labs()</li>
 </ul>
 
 
@@ -451,14 +425,14 @@ Reason for take log for transformation
 <div id="ref-fire" class="csl-entry" role="doc-biblioentry">
 BBC. 2020. <span>“Australia Fires: A Visual Guide to the Bushfire Crisis.”</span> <a href="https://www.bbc.com/news/world-australia-50951043">https://www.bbc.com/news/world-australia-50951043</a>.
 </div>
-<div id="ref-data" class="csl-entry" role="doc-biblioentry">
-jthomasmock. 2020. <span>“Australia Fires.”</span> <a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-01-07/">https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-01-07/</a>.
-</div>
 <div id="ref-AustraliaTemp2015" class="csl-entry" role="doc-biblioentry">
 Meteorology, Australian Bureau of. 2016. <span>“2015 Australian Mean Temperature Decile Map.”</span> <a href="http://www.bom.gov.au/climate/current/annual/aus/2015/">http://www.bom.gov.au/climate/current/annual/aus/2015/</a>.
 </div>
 <div id="ref-AustraliaTemp2019" class="csl-entry" role="doc-biblioentry">
 ———. 2020. <span>“2019 Australian Mean Temperature Decile Map.”</span> <a href="http://www.bom.gov.au/climate/current/annual/aus/2019/">http://www.bom.gov.au/climate/current/annual/aus/2019/</a>.
+</div>
+<div id="ref-tidytuesday" class="csl-entry" role="doc-biblioentry">
+Mock, Thomas. 2022. <span>“Tidy Tuesday: A Weekly Data Project Aimed at the r Ecosystem.”</span> <a href="https://github.com/rfordatascience/tidytuesday">https://github.com/rfordatascience/tidytuesday</a>.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
